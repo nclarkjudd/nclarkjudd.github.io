@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Nick Judd</title><link href="http://nickjudd.com/" rel="alternate"></link><link href="http://nickjudd.com/feeds/notes.atom.xml" rel="self"></link><id>http://nickjudd.com/</id><updated>2016-03-30T00:00:00-05:00</updated><entry><title>So you want a specific Python version on a server where you don't have root</title><link href="http://nickjudd.com/blog/2016/03/30/so-you-want-a-specific-python-version-on-a-server-where-you-dont-have-root" rel="alternate"></link><published>2016-03-30T00:00:00-05:00</published><author><name>Nick Judd</name></author><id>tag:nickjudd.com,2016-03-30:blog/2016/03/30/so-you-want-a-specific-python-version-on-a-server-where-you-dont-have-root</id><summary type="html">&lt;p&gt;Notes from 3/11/15&lt;/p&gt;
+&lt;p&gt;Updated 3/30/2016 (for Python 3!)&lt;/p&gt;
+&lt;p&gt;This is a simple HOWTO for getting a Python development environment up and running with virtualenv and virtualenvwrapper.&lt;/p&gt;
+&lt;p&gt;The HOWTO is written for social scientists who need to do their work from the command line, for example on a server provided by their parent institution.&lt;/p&gt;
+&lt;p&gt;Before moving on to more complicated things, like &lt;a href="http://www.continuum.io"&gt;installing Anaconda&lt;/a&gt; or getting yourself set up to manage different virtual environments with a tool like &lt;a href="http://www.docker.io"&gt;Docker&lt;/a&gt;, try this. And if this doesn't get it done for you, then the exercise will make it apparent precisly why you need Anaconda or Docker.&lt;/p&gt;
+&lt;p&gt;The following instructions were written for a machine running SElinux, but they ought to work on any *nix machine. They will also work fine from the OS X Terminal, so you could (and should!) follow this procedure to get multiple versions of Python running on your Mac.&lt;/p&gt;
+&lt;h1&gt;1.  Project setup&lt;/h1&gt;
+&lt;h2&gt;a.  Development environment&lt;/h2&gt;
+&lt;p&gt;11/3/14&lt;/p&gt;
+&lt;p&gt;Install Python locally (for instance, following these instructions):
+&lt;a href="http://stackoverflow.com/questions/1534210/use-different-python-version-with-virtualenv"&gt;&lt;em&gt;http://stackoverflow.com/questions/1534210/use-different-python-version-with-virtualenv&lt;/em&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;For Python 3.5.1, this involves:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;mkdir ~/src
+wget https://www.python.org/ftp/python/3.5.1/Python-3.5.1.tar.xz
+tar -xf Python-3.5.1.tar.xz
+cd Python-3.5.1
+mkdir ~/.localpython
+./configure --prefix=/home/username/.localpython
+make
+make install
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Since we're logging in remotely every time, set environment variables in
+&lt;code&gt;~/.bash_profile&lt;/code&gt;. This is what I add to my &lt;code&gt;~/.bash_profile&lt;/code&gt; file:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="x"&gt;PATH=&amp;quot;/home/username/.local/bin:/home/username/.localpython/bin:&lt;/span&gt;&lt;span class="p"&gt;$&lt;/span&gt;&lt;span class="nv"&gt;PATH&lt;/span&gt;&lt;span class="x"&gt;&amp;quot;&lt;/span&gt;
+&lt;span class="x"&gt;PYTHONHOME=&amp;quot;/home/username/.localpython&amp;quot;&lt;/span&gt;
+&lt;span class="x"&gt;export PYTHONHOME&lt;/span&gt;
+&lt;span class="x"&gt;export WORKON_HOME=&lt;/span&gt;&lt;span class="p"&gt;$&lt;/span&gt;&lt;span class="nv"&gt;HOME&lt;/span&gt;&lt;span class="x"&gt;/.virtualenvs&lt;/span&gt;
+&lt;span class="x"&gt;export PROJECT_HOME=&lt;/span&gt;&lt;span class="p"&gt;$&lt;/span&gt;&lt;span class="nv"&gt;HOME&lt;/span&gt;&lt;span class="x"&gt;/projects&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;After you have made these adjustments to your &lt;code&gt;.bash_profile&lt;/code&gt;, you can activate them by typing:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;source ~/.bash_profile
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Now it's time to install &lt;code&gt;virtualenv&lt;/code&gt; and &lt;code&gt;virtualenvwrapper&lt;/code&gt;. We'll do that using &lt;code&gt;pip&lt;/code&gt;.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Note: It is possible to use these instructions to install multiple versions of python in the same user space. There will be a symbolic link &lt;code&gt;python&lt;/code&gt; in the directory you specify as &lt;code&gt;PYTHONHOME&lt;/code&gt;. You control which Python you use by changing which version of Python is pointed to by that symbolic link.*&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;code&gt;pip&lt;/code&gt; is installed automatically with Python 3.&lt;/p&gt;
+&lt;p&gt;Now install &lt;code&gt;virtualenv&lt;/code&gt;, &lt;code&gt;virtualenvwrapper&lt;/code&gt;, and also a new &lt;code&gt;ipython&lt;/code&gt; because why not.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;pip install virtualenv virtualenvwrapper ipython
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Virtualenvwrapper will put a file "virtualenvwrapper.sh" in ./localpython/bin. Add this to the end of your &lt;code&gt;.bash_profile&lt;/code&gt; now:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;source /home/username/.localpython/bin/virtualenvwrapper.sh
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;You can &lt;code&gt;source&lt;/code&gt; your &lt;code&gt;.bash_profile&lt;/code&gt; again at this time, or just type the same line into the command line. &lt;/p&gt;
+&lt;p&gt;Finally, remember to create the &lt;code&gt;projects&lt;/code&gt; directory described in your &lt;code&gt;bash_profile&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;mkdir projects
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2&gt;b. Project environment&lt;/h2&gt;
+&lt;p&gt;11/3/2014&lt;/p&gt;
+&lt;p&gt;Make sure to
+run commands from inside the working directory for that project:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;mkproject project_name&lt;/code&gt; should create a new env and send you to that
+project directory.&lt;/p&gt;
+&lt;h2&gt;What have we done?&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;Installed a "local" version of Python.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;You configured your account such that when you run Python as your
+    username, you use that version of Python, not the version that is
+    installed on the server. This means you can use whatever version
+    carries the tools you want. &lt;strong&gt;&lt;em&gt;Importantly, this means you can also
+    easily install whatever Python packages you want into your local
+    Python by using "pip install package_name."&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;You installed Virtualenv, which is another tool for managing Python
+    environments. Say you need one set of tools for your current
+    project, but it turns out that later you work on another project
+    that needs, for example, an older version of the same package, or a
+    later version of the same package. If you just had your local
+    Python, you'd be screwed -- always uninstalling and reinstalling.
+    With Virtualenv, you compartmentalize your local Python into
+    additional versions of Python.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;When you typed &lt;code&gt;mkproject project_name&lt;/code&gt;, you created a virtualenv
+    called project_name and started working in that environment. You'd
+    see &lt;code&gt;(project_name)&lt;/code&gt; at the front of your bash prompt, letting you
+    know that's the environment you're in. If, in that environment, you
+    typed &lt;code&gt;pip install package_name&lt;/code&gt;, you would install &lt;code&gt;package_name&lt;/code&gt; --
+    &lt;em&gt;but only in that environment!&lt;/em&gt; This means that you can have many
+    different projects on the same machine, even if their Python package
+    requirements conflict with one another.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h1&gt;2.  Using the new tools&lt;/h1&gt;
+&lt;p&gt;To create a new project using a specific version of Python, use:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;mkproject &amp;lt;project_name&amp;gt; -p ~/.localpython/bin/&amp;lt;symlink for Python executable&amp;gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;To start working in a given project, type &lt;code&gt;workon project_name&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;When you are done working in that project environment, type
+&lt;code&gt;deactivate&lt;/code&gt;.&lt;/p&gt;</summary></entry><entry><title>Notes on an Emacs workflow for academic documents</title><link href="http://nickjudd.com/blog/2016/02/13/emacs-notes" rel="alternate"></link><published>2016-02-13T00:00:00-06:00</published><author><name>Nick Judd</name></author><id>tag:nickjudd.com,2016-02-13:blog/2016/02/13/emacs-notes</id><summary type="html">&lt;p&gt;I've put together a workflow for authoring in raw text using Emacs. These are my notes:&lt;/p&gt;
+&lt;h2&gt;1. Why author in emacs?&lt;/h2&gt;
+&lt;p&gt;The sociologist Kieran Healy argues that Emacs is a very useful tool if you want to &lt;a href="http://kieranhealy.org/blog/archives/2014/01/23/plain-text/"&gt;present research results&lt;/a&gt; in a professional, clear, and well-organized manner. Frankly, to get to the point where this is true, one must climb a steep learning curve. I think the productivity gains make it worth the effort.&lt;/p&gt;
+&lt;p&gt;I do a lot of document preparation in &lt;a href="https://daringfireball.net/projects/markdown/"&gt;Markdown&lt;/a&gt;. I can move documents from Markdown to &lt;a href="https://latex-project.org/intro.html"&gt;LaTeX&lt;/a&gt;, a sophisticated document preparation system favored by many academics, using &lt;a href="http://pandoc.org"&gt;Pandoc&lt;/a&gt;. There is a &lt;a href="https://joostkremers.github.io/pandoc-mode/"&gt;"Pandoc mode"&lt;/a&gt; available for Emacs. Importantly, I can add LaTeX preamble commands to a YAML snippet at the top of each document, like so:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;---
+title: &amp;#39;An Example Title.&amp;#39;
+author: &amp;quot;Nick Judd&amp;quot;
+abstract: &amp;quot;Paper abstract.&amp;quot;
+date: &amp;quot;February 15, 2016&amp;quot;
+classoption: titlepage
+header-includes:
+- \usepackage{txfonts}
+and so on ...
+
+---
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;I can also add math which will be immediately typeset the "right way." This is one of the biggest perks to using something that is built on top of TeX. For instance, I can write &lt;code&gt;$a^2 + b^2 = c^2$&lt;/code&gt; and it will be converted from Markdown into LaTeX the same way it is converted using Mathjax on this site: &lt;span class="math"&gt;\(a^2 + b^2 = c^2\)&lt;/span&gt;.&lt;/p&gt;
+&lt;h3&gt;Bibliographies and citations&lt;/h3&gt;
+&lt;p&gt;Academic work involves fastidious recordkeeping about external sources. I prefer Zotero because it has two key features:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;Firefox integration that downloads a journal article citation, the PDF (where available), and relevant metadata with one click, meaning it is very easy to get data &lt;em&gt;in&lt;/em&gt;;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;It has many options for generating citations in different formats and for exporting entire bibliographies -- it is easy to get data &lt;em&gt;out&lt;/em&gt;, for research purposes and to make sure no software can hold my work hostage.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Several packages integrate Zotero with Pandoc and Emacs. The one that works for me is &lt;a href="https://gitlab.com/egh/zotxt"&gt;zotxt&lt;/a&gt;. I use Zotxt to satisfy another set of criteria:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;On-the-fly bibliography management;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;On-the-fly citations --- I don't want to do any cut-pasting or hunting around for the right citation key to use;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Relative ease of use.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3&gt;Professional results&lt;/h3&gt;
+&lt;p&gt;Tools like &lt;code&gt;ggplot2&lt;/code&gt; and &lt;code&gt;stargazer&lt;/code&gt; in R or &lt;code&gt;pandas&lt;/code&gt;, &lt;code&gt;seaborn&lt;/code&gt;, and &lt;code&gt;statsmodels&lt;/code&gt; in Python generate beautiful tables and charts. They can also be used to generate raw LaTeX output suitable for integrating directly into a document.&lt;/p&gt;
+&lt;p&gt;With many tables and figures in each document, this sort of thing is easy to do and quick to replicate in Markdown and LaTeX, but would start to get tedious in Word.&lt;/p&gt;
+&lt;h2&gt;2. How-to&lt;/h2&gt;
+&lt;h3&gt;Installation&lt;/h3&gt;
+&lt;p&gt;I'll assume you have figured out how to download and install the following:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;LaTeX/Texlive/BibLaTeX&lt;/li&gt;
+&lt;li&gt;Python (should be on your computer already) and &lt;code&gt;pip&lt;/code&gt; (instructions &lt;a href="https://pypi.python.org/pypi/pip"&gt;here&lt;/a&gt;).&lt;/li&gt;
+&lt;li&gt;Zotero Standalone (I use the Firefox extension to acquire PDFs, but got the citation workflow going using Standalone.)&lt;/li&gt;
+&lt;li&gt;Pandoc and pandoc-citeproc&lt;/li&gt;
+&lt;li&gt;Emacs&lt;/li&gt;
+&lt;li&gt;pandoc-mode&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://gitlab.com/egh/zotxt/"&gt;pandoc-zotxt&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;For some reason my Emacs and Pandoc did not come with citeproc. In Fedora, I installed it using the dnf package manager like this: &lt;code&gt;sudo dnf install pandoc-citeproc.x86_64&lt;/code&gt;. You might consider &lt;a href="https://github.com/kjhealy/emacs-starter-kit"&gt;Kieran Healy's Emacs Starter Kit&lt;/a&gt; if acquiring everything seems mystifying. (Zotero should be pretty straightforward to get separately.)&lt;/p&gt;
+&lt;p&gt;Now, the part that is especially non-obvious:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Go to zotxt's &lt;a href="https://addons.mozilla.org/en-US/firefox/addon/zotxt/"&gt;Firefox Add-ons page&lt;/a&gt;; right-click on "Add to Firefox;" save the file.&lt;/li&gt;
+&lt;li&gt;With Zotero Standalone open, go to &lt;code&gt;Tools -&amp;gt; Add-ons&lt;/code&gt; and select "Install Add-on From File." I found this option by clicking on the crossed hammer and screwdriver at upper right; perhaps your interface is a little different. In the dialog box, select the file you just downloaded.&lt;/li&gt;
+&lt;li&gt;Again in Zotero Standalone, go to &lt;code&gt;Preferences -&amp;gt; Export&lt;/code&gt; and change the "Default Output Format" for QuickCopy to "Easy Citekey." If that option doesn't exist, restart Zotero Standalone and try again; it might need to be restarted for it to pick up on the fact that zotxt is there now.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;The Easy Citekey format is Pandoc-friendly --- you'll see how it works a little later.&lt;/p&gt;
+&lt;p&gt;Now you should have all of the tools you need.&lt;/p&gt;
+&lt;h3&gt;The Workflow&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;Try out the Emacs interactive tutorial if you haven't used Emacs before. The tutorial is comprehensive, assumes no prior knowledge, and is very user-friendly.&lt;/li&gt;
+&lt;li&gt;Author your work in an Emacs file in Markdown. With Emacs open, you can open a new file by holding down Control and pressing x, then holding down Control and pressing f. Emacs users call these "chords" and would abbreviate that combo like this: &lt;code&gt;C-x C-f&lt;/code&gt;. Notice an open "minibuffer" at the bottom of the Emacs screen; you can use this to specify out  The link again to the basic syntax is &lt;a href="https://daringfireball.net/projects/markdown/"&gt;here&lt;/a&gt;. How to use YAML metadata blocks for Pandoc is &lt;a href="http://pandoc.org/README.html#extension-yaml_metadata_block"&gt;here&lt;/a&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Adding a citation&lt;/strong&gt;: With Zotero Standalone open and while working in Emacs, place your cursor where you want the citation to go and use this keychord: &lt;code&gt;C-c " k&lt;/code&gt; (Control-c, then shift-single-quote for double quotes, then the letter k).&lt;/li&gt;
+&lt;li&gt;Notice the minibuffer at the bottom of the screen is now active; it wants you to hit &lt;code&gt;Enter&lt;/code&gt;, so do that.&lt;/li&gt;
+&lt;li&gt;In the next prompt in the minibuffer, type the author's last name and the date of the citation you want and hit &lt;code&gt;Enter&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Use the up and down arrow keys to navigate to the correct citation and hit &lt;code&gt;Enter&lt;/code&gt; when you've found it. You should now see a citekey in your document beginning with the "@" symbol. For Pandoc to make use of this, the ref must be in brackets ([]). You can additionally add multiple citations by separating them with semicolons (;) so the whole package looks like this: &lt;code&gt;[@mayhew:1974;@fenno:1978]&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Generating a document: After saving the Markdown file, open up a terminal, console, or shell window. Navigate to the appropriate directory and run Pandoc from the command line, invoking both zotxt and citeproc like this: &lt;code&gt;pandoc -F pandoc-zotxt -F pandoc-citeproc -s inputfile.md -o outputfile.pdf&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Notice that the bibliography has been inserted at the end of the document by default. You could also output LaTeX and edit that file to customize where your bibliography goes.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3&gt;Troubleshooting and Customization&lt;/h3&gt;
+&lt;p&gt;Sometimes citeproc won't pick up on a reference because it is a duplicate. You can fix this by specifying a citekey of your own within Zotero. If a reference isn't showing up, open up Zotero and add a citekey as a tag. See the section "Creating a custom citekey" &lt;a href="https://gitlab.com/egh/zotxt"&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;The syntax for invoking zotxt from Pandoc is adapted from &lt;a href="https://whk.name/cookbook/zoteroPandoc/"&gt;Warren Knight's recipe&lt;/a&gt;.&lt;/p&gt;
+&lt;h2&gt;Improve This Workflow&lt;/h2&gt;
+&lt;p&gt;I'd love to hear about other productivity hacks that beat this procedure for speed or ease of use.&lt;/p&gt;
+&lt;script type="text/javascript"&gt;if (!document.getElementById('mathjaxscript_pelican_#%@#$@#')) {
+    var align = "center",
+        indent = "0em",
+        linebreak = "false";
+
+    if (false) {
+        align = (screen.width &lt; 768) ? "left" : align;
+        indent = (screen.width &lt; 768) ? "0em" : indent;
+        linebreak = (screen.width &lt; 768) ? 'true' : linebreak;
+    }
+
+    var mathjaxscript = document.createElement('script');
+    var location_protocol = (false) ? 'https' : document.location.protocol;
+    if (location_protocol !== 'http' &amp;&amp; location_protocol !== 'https') location_protocol = 'https:';
+    mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
+    mathjaxscript.type = 'text/javascript';
+    mathjaxscript.src = location_protocol + '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript[(window.opera ? "innerHTML" : "text")] =
+        "MathJax.Hub.Config({" +
+        "    config: ['MMLorHTML.js']," +
+        "    TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } }," +
+        "    jax: ['input/TeX','input/MathML','output/HTML-CSS']," +
+        "    extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']," +
+        "    displayAlign: '"+ align +"'," +
+        "    displayIndent: '"+ indent +"'," +
+        "    showMathMenu: true," +
+        "    messageStyle: 'normal'," +
+        "    tex2jax: { " +
+        "        inlineMath: [ ['\\\\(','\\\\)'] ], " +
+        "        displayMath: [ ['$$','$$'] ]," +
+        "        processEscapes: true," +
+        "        preview: 'TeX'," +
+        "    }, " +
+        "    'HTML-CSS': { " +
+        "        styles: { '.MathJax_Display, .MathJax .mo, .MathJax .mi, .MathJax .mn': {color: 'inherit ! important'} }," +
+        "        linebreaks: { automatic: "+ linebreak +", width: '90% container' }," +
+        "    }, " +
+        "}); " +
+        "if ('default' !== 'default') {" +
+            "MathJax.Hub.Register.StartupHook('HTML-CSS Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax['HTML-CSS'].FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+            "MathJax.Hub.Register.StartupHook('SVG Jax Ready',function () {" +
+                "var VARIANT = MathJax.OutputJax.SVG.FONTDATA.VARIANT;" +
+                "VARIANT['normal'].fonts.unshift('MathJax_default');" +
+                "VARIANT['bold'].fonts.unshift('MathJax_default-bold');" +
+                "VARIANT['italic'].fonts.unshift('MathJax_default-italic');" +
+                "VARIANT['-tex-mathit'].fonts.unshift('MathJax_default-italic');" +
+            "});" +
+        "}";
+    (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
+}
+&lt;/script&gt;</summary></entry></feed>
