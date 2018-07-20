@@ -39,7 +39,7 @@
 			<p></p>
 		</div>
 		<nav class="sidebar-nav">
-		  | <a href="/">Home</a> | <a href="/blog/">Blog</a> |
+		  <a href="/">Home</a> | <a href="http://nickjudd.com/files/ncj-cv.pdf">CV</a> | <a href="/blog/">Blog</a> |
 		</nav>
 		<nav class="sidebar-nav">
 			<a class="sidebar-nav-item" href="mailto:nick@nclarkjudd.com">
@@ -88,11 +88,11 @@ make install
 
 <p>Since we're logging in remotely every time, set environment variables in
 <code>~/.bash_profile</code>. This is what I add to my <code>~/.bash_profile</code> file:</p>
-<div class="highlight"><pre><span></span><span class="x">PATH=&quot;/home/username/.local/bin:/home/username/.localpython/bin:</span><span class="p">$</span><span class="nv">PATH</span><span class="x">&quot;</span>
-<span class="x">PYTHONHOME=&quot;/home/username/.localpython&quot;</span>
-<span class="x">export PYTHONHOME</span>
-<span class="x">export WORKON_HOME=</span><span class="p">$</span><span class="nv">HOME</span><span class="x">/.virtualenvs</span>
-<span class="x">export PROJECT_HOME=</span><span class="p">$</span><span class="nv">HOME</span><span class="x">/projects</span>
+<div class="highlight"><pre><span></span>PATH=&quot;/home/username/.local/bin:/home/username/.localpython/bin:$PATH&quot;
+PYTHONHOME=&quot;/home/username/.localpython&quot;
+export PYTHONHOME
+export WORKON_HOME=$HOME/.virtualenvs
+export PROJECT_HOME=$HOME/projects
 </pre></div>
 
 

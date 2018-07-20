@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Nick Judd</title><link href="http://nickjudd.com/" rel="alternate"></link><link href="http://nickjudd.com/feeds/all.atom.xml" rel="self"></link><id>http://nickjudd.com/</id><updated>2016-03-30T00:00:00-05:00</updated><entry><title>So you want a specific Python version on a server where you don't have root</title><link href="http://nickjudd.com/blog/2016/03/30/so-you-want-a-specific-python-version-on-a-server-where-you-dont-have-root" rel="alternate"></link><published>2016-03-30T00:00:00-05:00</published><author><name>Nick Judd</name></author><id>tag:nickjudd.com,2016-03-30:blog/2016/03/30/so-you-want-a-specific-python-version-on-a-server-where-you-dont-have-root</id><summary type="html">&lt;p&gt;Notes from 3/11/15&lt;/p&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Nick Judd</title><link href="http://nickjudd.com/" rel="alternate"></link><link href="http://nickjudd.com/feeds/all.atom.xml" rel="self"></link><id>http://nickjudd.com/</id><updated>2016-03-30T00:00:00-05:00</updated><entry><title>So you want a specific Python version on a server where you don't have root</title><link href="http://nickjudd.com/blog/2016/03/30/so-you-want-a-specific-python-version-on-a-server-where-you-dont-have-root" rel="alternate"></link><published>2016-03-30T00:00:00-05:00</published><updated>2016-03-30T00:00:00-05:00</updated><author><name>Nick Judd</name></author><id>tag:nickjudd.com,2016-03-30:/blog/2016/03/30/so-you-want-a-specific-python-version-on-a-server-where-you-dont-have-root</id><summary type="html">&lt;p&gt;How to get a Python development environment up and running using virtualenv --- even on a machine you don't control. These are notes to myself more than they are a "post" to be shared.&lt;/p&gt;</summary><content type="html">&lt;p&gt;Notes from 3/11/15&lt;/p&gt;
 &lt;p&gt;Updated 3/30/2016 (for Python 3!)&lt;/p&gt;
 &lt;p&gt;This is a simple HOWTO for getting a Python development environment up and running with virtualenv and virtualenvwrapper.&lt;/p&gt;
 &lt;p&gt;The HOWTO is written for social scientists who need to do their work from the command line, for example on a server provided by their parent institution.&lt;/p&gt;
@@ -24,11 +24,11 @@ make install
 
 &lt;p&gt;Since we're logging in remotely every time, set environment variables in
 &lt;code&gt;~/.bash_profile&lt;/code&gt;. This is what I add to my &lt;code&gt;~/.bash_profile&lt;/code&gt; file:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="x"&gt;PATH=&amp;quot;/home/username/.local/bin:/home/username/.localpython/bin:&lt;/span&gt;&lt;span class="p"&gt;$&lt;/span&gt;&lt;span class="nv"&gt;PATH&lt;/span&gt;&lt;span class="x"&gt;&amp;quot;&lt;/span&gt;
-&lt;span class="x"&gt;PYTHONHOME=&amp;quot;/home/username/.localpython&amp;quot;&lt;/span&gt;
-&lt;span class="x"&gt;export PYTHONHOME&lt;/span&gt;
-&lt;span class="x"&gt;export WORKON_HOME=&lt;/span&gt;&lt;span class="p"&gt;$&lt;/span&gt;&lt;span class="nv"&gt;HOME&lt;/span&gt;&lt;span class="x"&gt;/.virtualenvs&lt;/span&gt;
-&lt;span class="x"&gt;export PROJECT_HOME=&lt;/span&gt;&lt;span class="p"&gt;$&lt;/span&gt;&lt;span class="nv"&gt;HOME&lt;/span&gt;&lt;span class="x"&gt;/projects&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;PATH=&amp;quot;/home/username/.local/bin:/home/username/.localpython/bin:$PATH&amp;quot;
+PYTHONHOME=&amp;quot;/home/username/.localpython&amp;quot;
+export PYTHONHOME
+export WORKON_HOME=$HOME/.virtualenvs
+export PROJECT_HOME=$HOME/projects
 &lt;/pre&gt;&lt;/div&gt;
 
 
@@ -106,7 +106,7 @@ project directory.&lt;/p&gt;
 
 &lt;p&gt;To start working in a given project, type &lt;code&gt;workon project_name&lt;/code&gt;.&lt;/p&gt;
 &lt;p&gt;When you are done working in that project environment, type
-&lt;code&gt;deactivate&lt;/code&gt;.&lt;/p&gt;</summary></entry><entry><title>Notes on an Emacs workflow for academic documents</title><link href="http://nickjudd.com/blog/2016/02/13/emacs-notes" rel="alternate"></link><published>2016-02-13T00:00:00-06:00</published><author><name>Nick Judd</name></author><id>tag:nickjudd.com,2016-02-13:blog/2016/02/13/emacs-notes</id><summary type="html">&lt;p&gt;I've put together a workflow for authoring in raw text using Emacs. These are my notes:&lt;/p&gt;
+&lt;code&gt;deactivate&lt;/code&gt;.&lt;/p&gt;</content></entry><entry><title>Notes on an Emacs workflow for academic documents</title><link href="http://nickjudd.com/blog/2016/02/13/emacs-notes" rel="alternate"></link><published>2016-02-13T00:00:00-06:00</published><updated>2016-02-13T00:00:00-06:00</updated><author><name>Nick Judd</name></author><id>tag:nickjudd.com,2016-02-13:/blog/2016/02/13/emacs-notes</id><summary type="html">&lt;p&gt;How and why to author documents in Emacs. These are notes to myself as much as they are to share.&lt;/p&gt;</summary><content type="html">&lt;p&gt;I've put together a workflow for authoring in raw text using Emacs. These are my notes:&lt;/p&gt;
 &lt;h2&gt;1. Why author in emacs?&lt;/h2&gt;
 &lt;p&gt;The sociologist Kieran Healy argues that Emacs is a very useful tool if you want to &lt;a href="http://kieranhealy.org/blog/archives/2014/01/23/plain-text/"&gt;present research results&lt;/a&gt; in a professional, clear, and well-organized manner. Frankly, to get to the point where this is true, one must climb a steep learning curve. I think the productivity gains make it worth the effort.&lt;/p&gt;
 &lt;p&gt;I do a lot of document preparation in &lt;a href="https://daringfireball.net/projects/markdown/"&gt;Markdown&lt;/a&gt;. I can move documents from Markdown to &lt;a href="https://latex-project.org/intro.html"&gt;LaTeX&lt;/a&gt;, a sophisticated document preparation system favored by many academics, using &lt;a href="http://pandoc.org"&gt;Pandoc&lt;/a&gt;. There is a &lt;a href="https://joostkremers.github.io/pandoc-mode/"&gt;"Pandoc mode"&lt;/a&gt; available for Emacs. Importantly, I can add LaTeX preamble commands to a YAML snippet at the top of each document, like so:&lt;/p&gt;
@@ -199,11 +199,9 @@ and so on ...
     }
 
     var mathjaxscript = document.createElement('script');
-    var location_protocol = (false) ? 'https' : document.location.protocol;
-    if (location_protocol !== 'http' &amp;&amp; location_protocol !== 'https') location_protocol = 'https:';
     mathjaxscript.id = 'mathjaxscript_pelican_#%@#$@#';
     mathjaxscript.type = 'text/javascript';
-    mathjaxscript.src = location_protocol + '//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML';
+    mathjaxscript.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/latest.js?config=TeX-AMS-MML_HTMLorMML';
     mathjaxscript[(window.opera ? "innerHTML" : "text")] =
         "MathJax.Hub.Config({" +
         "    config: ['MMLorHTML.js']," +
@@ -243,4 +241,4 @@ and so on ...
         "}";
     (document.body || document.getElementsByTagName('head')[0]).appendChild(mathjaxscript);
 }
-&lt;/script&gt;</summary></entry></feed>
+&lt;/script&gt;</content></entry></feed>
